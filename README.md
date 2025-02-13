@@ -1,8 +1,6 @@
-# React + Vite
+# 登山一覧表示アプリ
+日本の百名山、二百名山の登山一覧を表示する。
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+# 利用するAPI
+mountix API (1.1.0)
+https://mountix-docs.codemountains.org/#tag/mountains
