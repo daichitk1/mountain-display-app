@@ -6,33 +6,83 @@ import './App.css'
 import axios from 'axios';
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [mountains, setMountains] = useState([])
-
+  const [mountains, setMountains] = useState([]);
+  const [page, setPage] = useState(1);
+  const [mountainState, setMountainState] = useState(0);
+  const limit = 15
   useEffect(()=>{
-    fetchCharacters();
-  })
-  const fetchCharacters = async () => {
-    const apiUrl= "https://mountix.codemountains.org/api/v1/mountains?limit=20";
+    fetchMountains(page);
+  }, [page, mountainState])
+
+  const fetchMountains = async (page) => {
+    const offset = (page - 1) * limit;
+    const apiUrl= `https://mountix.codemountains.org/api/v1/mountains?limit=${limit}&offset=${offset}${mountainState === 0 ? "" : mountainState === 1 ? "&tag=1" : "&tag=2"}`;
     const result = await axios.get(apiUrl);
     console.log(result.data.mountains);
     setMountains(result.data.mountains);
-
   }
+
+  const handleNext = async() =>{
+    const nextPage = page + 1;
+    await fetchMountains(nextPage);
+    setPage(nextPage);
+  }
+
+  const handlePrev = async() =>{
+    const prevPage = (page == 0 ? 0 : page - 1);
+    await fetchMountains(prevPage);
+    setPage(prevPage);
+  }
+
+  const setOneNarrow = async()=>{
+    setMountainState(1);
+    setPage(1);
+  }
+
+  const setTwoNarrow = async()=>{
+    setMountainState(2);
+    setPage(1);
+  }
+
+  const resetNarrow = async()=>{
+    setMountainState(0);
+    setPage(1);
+  }
+
   return (
     <>
-    <h1 class="text-4xl">山の一覧アプリ</h1>
+    <h1 class="text-4xl">山の一覧アプリ⛰️</h1>
+    <div class="m-3 flex">
+      <div class={`rounded w-20 m-1 ${mountainState === 1 ? "bg-blue-600 text-white" : "bg-blue-200 hover:bg-blue-600"}`} onClick={setOneNarrow}>百名山</div>
+      <div class={`rounded w-20 m-1 ${mountainState === 2 ? "bg-green-600 text-white" : "bg-green-200 hover:bg-green-600"}`} onClick={setTwoNarrow}>二名山</div>
+      <div class="w-20 bg-white-200 m-1 rounded hover:bg-white-600" onClick={resetNarrow}>リセット</div>
+    </div>
+    <div class={`m-4 rounded w-20 w-20 bg-red-200`}>その他</div>
+    <div className="rounded bg-sky-200">
+      <button disabled = { page === 1} class= {`${page === 1 ? 'bg-blue-100' : 'bg-blue-600 text-white hover:bg-blue-400'} w-10 m-5`} onClick={handlePrev}>前</button>
+      <span>{page}</span>
+      <button disabled = { mountains.length < limit } className={ `w-10 m-5 ${mountains.length < limit ? 'bg-blue-100' : 'bg-blue-600 text-white hover:bg-blue-400'}`} onClick={handleNext}>後</button>
+    </div>
     <div class="grid grid-cols-4 p-10">
       {mountains.map((mountain)=> {
-        return <div class="w-60 h-60 m-1 bg-blue-200">
-        <div class="grid grid-cols-1">
+         {console.log(mountain.tags)}
+        return (
+        <div class={`w-70 h-70 m-1 hover:bg-sky-400 ${mountain.tags[0] === '百名山' ? 'bg-blue-200' : mountain.tags[0] === '二百名山' ? 'bg-green-200' : 'bg-red-200'}`}>
+        <div class="grid grid-cols-1 flex items-center justify-center">
           <div class="mt-5 text-2xl">{mountain.name}</div>
           <div>({mountain.nameKana})</div>
           <div class="m-3 text-1xl">({mountain.prefectures})</div>
-          <div class="m-3">({mountain.tags})</div>
+          <div class="m-1 text-1xl">地域: {mountain.area}</div>
+          <div class="m-1 text-1xl">標高: {mountain.elevation}m</div>
         </div>
-        </div>;
+        </div>
+        )
       })}
+    </div>
+    <div className="rounded bg-sky-200">
+      <button disabled = { page === 1} class= {`${page === 1 ? 'bg-blue-100' : 'bg-blue-600 text-white hover:bg-blue-400'} w-10 m-5`} onClick={handlePrev}>前</button>
+      <span>{page}</span>
+      <button disabled = { mountains.length < limit } className={ `w-10 m-5 ${mountains.length < limit ? 'bg-blue-100' : 'bg-blue-600 text-white hover:bg-blue-400'}`} onClick={handleNext}>次</button>
     </div>
     </>
   )
