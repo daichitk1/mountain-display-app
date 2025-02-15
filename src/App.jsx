@@ -53,15 +53,15 @@ function App() {
     <>
     <h1 class="text-4xl">山の一覧アプリ⛰️</h1>
     <div class="m-3 flex">
-      <div class={`rounded w-20 m-1 ${mountainState === 1 ? "bg-blue-600 text-white" : "bg-blue-200 hover:bg-blue-600"}`} onClick={setOneNarrow}>百名山</div>
-      <div class={`rounded w-20 m-1 ${mountainState === 2 ? "bg-green-600 text-white" : "bg-green-200 hover:bg-green-600"}`} onClick={setTwoNarrow}>二名山</div>
-      <div class="w-20 bg-white-200 m-1 rounded hover:bg-white-600" onClick={resetNarrow}>リセット</div>
+      <div class={`rounded w-20 m-1 ${mountainState === 1 ? "bg-blue-700 text-white" : "bg-blue-200 hover:bg-blue-700"}`} onClick={setOneNarrow}>百名山</div>
+      <div class={`rounded w-20 m-1 ${mountainState === 2 ? "bg-green-700 text-white" : "bg-green-200 hover:bg-green-700"}`} onClick={setTwoNarrow}>二百名山</div>
+      <div class="w-20 bg-stone-100 m-1 rounded hover:bg-black hover:text-white" onClick={resetNarrow}>リセット</div>
     </div>
     <div class={`m-4 rounded w-20 w-20 bg-red-200`}>その他</div>
     <div className="rounded bg-sky-200">
       <button disabled = { page === 1} class= {`${page === 1 ? 'bg-blue-100' : 'bg-blue-600 text-white hover:bg-blue-400'} w-10 m-5`} onClick={handlePrev}>前</button>
       <span>{page}</span>
-      <button disabled = { mountains.length < limit } className={ `w-10 m-5 ${mountains.length < limit ? 'bg-blue-100' : 'bg-blue-600 text-white hover:bg-blue-400'}`} onClick={handleNext}>後</button>
+      <button disabled = { mountains.length < limit } className={ `w-10 m-5 ${mountains.length < limit ? 'bg-blue-100' : 'bg-blue-600 text-white hover:bg-blue-400'}`} onClick={handleNext}>次</button>
     </div>
     <div class="grid grid-cols-4 p-10">
       {mountains.map((mountain)=> {
