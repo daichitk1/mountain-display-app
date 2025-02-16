@@ -8,6 +8,7 @@ import axios from 'axios';
 function App() {
   const [mountains, setMountains] = useState([]);
   const [page, setPage] = useState(1);
+  const [onemountain, setOnemountain] = useState([]);
   const [mountainState, setMountainState] = useState(0);
   const limit = 15
   useEffect(()=>{
@@ -26,28 +27,52 @@ function App() {
     const nextPage = page + 1;
     await fetchMountains(nextPage);
     setPage(nextPage);
+    setOnemountain([]);
   }
 
   const handlePrev = async() =>{
     const prevPage = (page == 0 ? 0 : page - 1);
     await fetchMountains(prevPage);
     setPage(prevPage);
+    setOnemountain([]);
   }
 
   const setOneNarrow = async()=>{
     setMountainState(1);
     setPage(1);
+    setOnemountain([]);
   }
 
   const setTwoNarrow = async()=>{
     setMountainState(2);
     setPage(1);
+    setOnemountain([]);
   }
 
   const resetNarrow = async()=>{
     setMountainState(0);
     setPage(1);
+    setOnemountain([]);
   }
+
+  function DisplayMountain(){
+    console.log(onemountain)
+    if (onemountain.length === 0){
+      return null;
+    }
+    window.scrollTo(0, 0)
+    return(
+      <div class="grid grid-cols-1 flex items-center justify-center bg-green-200 m-10" onClick = {() => setOnemountain([])}>
+        <div class="mt-5 text-2xl font-semibold">{onemountain.name}</div>
+        <div>({onemountain.nameKana})</div>
+        <div class="m-3 text-1xl">({onemountain.prefectures})</div>
+        <div class="m-1 text-1xl">地域: {onemountain.area}</div>
+        <div class="m-1 text-1xl">標高: {onemountain.elevation}m</div>
+        <div class="m-3 text-1xl font-bold">おすすめポイント </div>
+      </div>
+    );
+  }
+
 
   return (
     <>
@@ -58,6 +83,7 @@ function App() {
       <div class="w-20 bg-stone-100 m-1 rounded hover:bg-black hover:text-white" onClick={resetNarrow}>リセット</div>
     </div>
     <div class={`m-4 rounded w-20 w-20 bg-red-200`}>その他</div>
+    <DisplayMountain/>
     <div className="rounded bg-sky-200">
       <button disabled = { page === 1} class= {`${page === 1 ? 'bg-blue-100' : 'bg-blue-600 text-white hover:bg-blue-400'} w-10 m-5`} onClick={handlePrev}>前</button>
       <span>{page}</span>
@@ -68,13 +94,13 @@ function App() {
          {console.log(mountain.tags)}
         return (
         <div class={`w-70 h-70 m-1 hover:bg-sky-400 ${mountain.tags[0] === '百名山' ? 'bg-blue-200' : mountain.tags[0] === '二百名山' ? 'bg-green-200' : 'bg-red-200'}`}>
-        <div class="grid grid-cols-1 flex items-center justify-center">
-          <div class="mt-5 text-2xl font-semibold">{mountain.name}</div>
-          <div>({mountain.nameKana})</div>
-          <div class="m-3 text-1xl">({mountain.prefectures})</div>
-          <div class="m-1 text-1xl">地域: {mountain.area}</div>
-          <div class="m-1 text-1xl">標高: {mountain.elevation}m</div>
-        </div>
+          <div class="grid grid-cols-1 flex items-center justify-center" onClick = {() => setOnemountain(mountain)}>
+            <div class="mt-5 text-2xl font-semibold">{mountain.name}</div>
+            <div>({mountain.nameKana})</div>
+            <div class="m-3 text-1xl">({mountain.prefectures})</div>
+            <div class="m-1 text-1xl">地域: {mountain.area}</div>
+            <div class="m-1 text-1xl">標高: {mountain.elevation}m</div>
+          </div>
         </div>
         )
       })}
