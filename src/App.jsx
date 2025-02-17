@@ -56,7 +56,6 @@ function App() {
   }
 
   function DisplayMountain(){
-    console.log(onemountain)
     if (onemountain.length === 0){
       return null;
     }
@@ -68,7 +67,6 @@ function App() {
         <div class="m-3 text-1xl">({onemountain.prefectures})</div>
         <div class="m-1 text-1xl">地域: {onemountain.area}</div>
         <div class="m-1 text-1xl">標高: {onemountain.elevation}m</div>
-        <div class="m-3 text-1xl font-bold">おすすめポイント </div>
       </div>
     );
   }
