@@ -4,6 +4,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import axios from 'axios';
+import GoogleMapAPI from './GoogleMapAPI';
 
 function App() {
   const [mountains, setMountains] = useState([]);
@@ -55,18 +56,21 @@ function App() {
     setOnemountain([]);
   }
 
+
   function DisplayMountain(){
     if (onemountain.length === 0){
       return null;
     }
     window.scrollTo(0, 0)
     return(
-      <div class="grid grid-cols-1 flex items-center justify-center bg-green-200 m-10" onClick = {() => setOnemountain([])}>
+      <div class="grid grid-cols-1 flex items-center justify-center bg-green-200 m-10">
+        <div class="rounded bg-white w-20 ml-3 my-2 hover:bg-black hover:text-white" onClick = {() => setOnemountain([])}>閉じる</div>
         <div class="mt-5 text-2xl font-semibold">{onemountain.name}</div>
         <div>({onemountain.nameKana})</div>
         <div class="m-3 text-1xl">({onemountain.prefectures})</div>
         <div class="m-1 text-1xl">地域: {onemountain.area}</div>
         <div class="m-1 text-1xl">標高: {onemountain.elevation}m</div>
+        <GoogleMapAPI latitude={onemountain.location.latitude} longitude={onemountain.location.longitude} name={onemountain.name}/>
       </div>
     );
   }
