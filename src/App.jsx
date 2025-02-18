@@ -11,17 +11,47 @@ function App() {
   const [page, setPage] = useState(1);
   const [onemountain, setOnemountain] = useState([]);
   const [mountainState, setMountainState] = useState(0);
+  const [text, setText] = useState("");
   const limit = 15
   useEffect(()=>{
     fetchMountains(page);
   }, [page, mountainState])
-
+  useEffect(()=>{
+    fetchAIdata(onemountain.name);
+  }, [onemountain])
   const fetchMountains = async (page) => {
     const offset = (page - 1) * limit;
     const apiUrl= `https://mountix.codemountains.org/api/v1/mountains?limit=${limit}&offset=${offset}${mountainState === 0 ? "" : mountainState === 1 ? "&tag=1" : "&tag=2"}`;
     const result = await axios.get(apiUrl);
     console.log(result.data.mountains);
     setMountains(result.data.mountains);
+  }
+
+  const fetchAIdata = async (props) =>{
+    console.log("にゃあーー");
+    console.log(props);
+    console.log("にゃあーー");
+    if (props===undefined){
+      return null;
+    }
+    const response = await axios.post(
+      'https://api.openai.com/v1/chat/completions',{
+          model: "gpt-4o",
+          messages: [
+              { role: "system", content: "あなたは登山について詳しい専門家です" },
+              {
+                  role: "user",
+                  content: props +"についておすすめを3つ箇条書きで合計300文字以下で具体的な固有名素を踏まえ簡潔に教えて。また、3つの箇条書きは改行文字をつけてください",
+              },
+          ],
+      },{
+      headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${import.meta.env.VITE_OPEN_AI_API}`,
+      },
+    }
+    );
+    setText(response.data.choices[0].message.content);
   }
 
   const handleNext = async() =>{
@@ -64,12 +94,13 @@ function App() {
     window.scrollTo(0, 0)
     return(
       <div class="grid grid-cols-1 flex items-center justify-center bg-green-200 m-10">
-        <div class="rounded bg-white w-20 ml-3 my-2 hover:bg-black hover:text-white" onClick = {() => setOnemountain([])}>閉じる</div>
+        <div class="rounded bg-white w-20 ml-3 my-2 hover:bg-black hover:text-white" onClick = {() => {setOnemountain([]), setText([]);}}>閉じる</div>
         <div class="mt-5 text-2xl font-semibold">{onemountain.name}</div>
         <div>({onemountain.nameKana})</div>
         <div class="m-3 text-1xl">({onemountain.prefectures})</div>
         <div class="m-1 text-1xl">地域: {onemountain.area}</div>
         <div class="m-1 text-1xl">標高: {onemountain.elevation}m</div>
+        <div class="w-200 mx-auto p-5 my-5">{text}</div>
         <GoogleMapAPI latitude={onemountain.location.latitude} longitude={onemountain.location.longitude} name={onemountain.name}/>
       </div>
     );
@@ -96,7 +127,7 @@ function App() {
          {console.log(mountain.tags)}
         return (
         <div class={`w-70 h-70 m-1 hover:bg-sky-400 ${mountain.tags[0] === '百名山' ? 'bg-blue-200' : mountain.tags[0] === '二百名山' ? 'bg-green-200' : 'bg-red-200'}`}>
-          <div class="grid grid-cols-1 flex items-center justify-center" onClick = {() => setOnemountain(mountain)}>
+          <div class="grid grid-cols-1 flex items-center justify-center" onClick = {() => {setText([]), setOnemountain(mountain)}}>
             <div class="mt-5 text-2xl font-semibold">{mountain.name}</div>
             <div>({mountain.nameKana})</div>
             <div class="m-3 text-1xl">({mountain.prefectures})</div>
