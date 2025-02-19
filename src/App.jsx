@@ -31,7 +31,7 @@ function App() {
     console.log("にゃあーー");
     console.log(props);
     console.log("にゃあーー");
-    if (props===undefined){
+    if (props.name===undefined){
       return null;
     }
     const response = await axios.post(
@@ -41,7 +41,7 @@ function App() {
               { role: "system", content: "あなたは登山について詳しい専門家です" },
               {
                   role: "user",
-                  content: props.name +"について根拠が明確になっている情報のみ利用しておすすめを知りたいです。合計200文字以下で具体的な固有名素を踏まえ簡潔に教えて。山の詳細情報はこちらで("+ props+")具体的な文が正しいかどうかの判断材料に利用してください。",
+                  content: props.name +"について根拠が明確になっている情報のみ利用しておすすめを知りたいです。合計200文字以下で具体的な固有名素を踏まえ簡潔に教えて。山の詳細情報はこちらで(エリア"+ props.area+",標高"+props.elevation+")具体的な文が正しいかどうかの判断材料に利用してください。",
               },
           ],
       },{
@@ -135,7 +135,7 @@ function App() {
          {console.log(mountain.tags)}
         return (
         <div class={`w-70 h-70 m-1 hover:bg-sky-400 ${mountain.tags[0] === '百名山' ? 'bg-blue-200' : mountain.tags[0] === '二百名山' ? 'bg-green-200' : 'bg-red-200'}`}>
-          <div class="grid grid-cols-1 flex items-center justify-center" onClick = {() => {setText([]), setOnemountain(mountain)}}>
+          <div class="grid grid-cols-1 flex items-center justify-center" onClick = {() => {setText(""), setOnemountain(mountain)}}>
             <div class="mt-5 text-2xl font-semibold">{mountain.name}</div>
             <div>({mountain.nameKana})</div>
             <div class="m-3 text-1xl">({mountain.prefectures})</div>
