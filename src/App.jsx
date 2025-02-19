@@ -17,7 +17,7 @@ function App() {
     fetchMountains(page);
   }, [page, mountainState])
   useEffect(()=>{
-    fetchAIdata(onemountain.name);
+    fetchAIdata(onemountain);
   }, [onemountain])
   const fetchMountains = async (page) => {
     const offset = (page - 1) * limit;
@@ -41,7 +41,7 @@ function App() {
               { role: "system", content: "あなたは登山について詳しい専門家です" },
               {
                   role: "user",
-                  content: props +"についておすすめを3つ、合計300文字以下で具体的な固有名素を踏まえ簡潔に教えて。また、根拠が明確になっている情報のみ教えて。",
+                  content: props.name +"について根拠が明確になっている情報のみ利用しておすすめを知りたいです。合計200文字以下で具体的な固有名素を踏まえ簡潔に教えて。山の詳細情報はこちらで("+ props+")具体的な文が正しいかどうかの判断材料に利用してください。",
               },
           ],
       },{
@@ -100,7 +100,15 @@ function App() {
         <div class="m-3 text-1xl">({onemountain.prefectures})</div>
         <div class="m-1 text-1xl">地域: {onemountain.area}</div>
         <div class="m-1 text-1xl">標高: {onemountain.elevation}m</div>
-        {(text.length !== 0) && <div class="w-200 mx-auto p-5 my-5 rounded bg-white">{text}</div>}
+        <div class="my-4">
+          {(text.length !== 0) &&
+          text.split("¥n").map((line)=>{
+            return (
+            <div class="w-100 mx-auto text-left">
+              {line}
+            </div>)
+          })}
+        </div>
         <GoogleMapAPI latitude={onemountain.location.latitude} longitude={onemountain.location.longitude} name={onemountain.name}/>
       </div>
     );
