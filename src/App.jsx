@@ -41,7 +41,7 @@ function App() {
               { role: "system", content: "あなたは登山について詳しい専門家です" },
               {
                   role: "user",
-                  content: props +"についておすすめを3つ箇条書きで合計300文字以下で具体的な固有名素を踏まえ簡潔に教えて。また、3つの箇条書きは改行文字をつけてください",
+                  content: props +"についておすすめを3つ、合計300文字以下で具体的な固有名素を踏まえ簡潔に教えて。また、根拠が明確になっている情報のみ教えて。",
               },
           ],
       },{
@@ -94,13 +94,13 @@ function App() {
     window.scrollTo(0, 0)
     return(
       <div class="grid grid-cols-1 flex items-center justify-center bg-green-200 m-10">
-        <div class="rounded bg-white w-20 ml-3 my-2 hover:bg-black hover:text-white" onClick = {() => {setOnemountain([]), setText([]);}}>閉じる</div>
+        <div class="rounded bg-white w-20 ml-3 my-2 hover:bg-black hover:text-white" onClick = {() => {setOnemountain([]), setText("");}}>閉じる</div>
         <div class="mt-5 text-2xl font-semibold">{onemountain.name}</div>
         <div>({onemountain.nameKana})</div>
         <div class="m-3 text-1xl">({onemountain.prefectures})</div>
         <div class="m-1 text-1xl">地域: {onemountain.area}</div>
         <div class="m-1 text-1xl">標高: {onemountain.elevation}m</div>
-        <div class="w-200 mx-auto p-5 my-5">{text}</div>
+        {(text.length !== 0) && <div class="w-200 mx-auto p-5 my-5 rounded bg-white">{text}</div>}
         <GoogleMapAPI latitude={onemountain.location.latitude} longitude={onemountain.location.longitude} name={onemountain.name}/>
       </div>
     );
