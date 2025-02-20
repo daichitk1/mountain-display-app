@@ -12,16 +12,18 @@ function App() {
   const [onemountain, setOnemountain] = useState([]);
   const [mountainState, setMountainState] = useState(0);
   const [text, setText] = useState("");
+  const [input, setInput] = useState("");
+  const [query, setQuery] = useState("");
   const limit = 15
   useEffect(()=>{
     fetchMountains(page);
-  }, [page, mountainState])
+  }, [page, mountainState, query])
   useEffect(()=>{
     fetchAIdata(onemountain);
   }, [onemountain])
   const fetchMountains = async (page) => {
     const offset = (page - 1) * limit;
-    const apiUrl= `https://mountix.codemountains.org/api/v1/mountains?limit=${limit}&offset=${offset}${mountainState === 0 ? "" : mountainState === 1 ? "&tag=1" : "&tag=2"}`;
+    const apiUrl= `https://mountix.codemountains.org/api/v1/mountains?limit=${limit}&offset=${offset}${mountainState === 0 ? "" : mountainState === 1 ? "&tag=1" : "&tag=2"}&name=${query}`;
     const result = await axios.get(apiUrl);
     console.log(result.data.mountains);
     setMountains(result.data.mountains);
@@ -117,6 +119,7 @@ function App() {
 
   return (
     <>
+    <div>
     <h1 class="text-4xl">山の一覧アプリ⛰️</h1>
     <div class="m-3 flex">
       <div class={`rounded w-20 m-1 ${mountainState === 1 ? "bg-blue-700 text-white" : "bg-blue-200 hover:bg-blue-700"}`} onClick={setOneNarrow}>百名山</div>
@@ -124,6 +127,10 @@ function App() {
       <div class="w-20 bg-stone-100 m-1 rounded hover:bg-black hover:text-white" onClick={resetNarrow}>リセット</div>
     </div>
     <div class={`m-4 rounded w-20 w-20 bg-red-200`}>その他</div>
+    <label>
+      <input value={input} onChange={(e)=> setInput(e.target.value)} name="myInput" class="border-2 border-black-500 my-2" defaultValue="Some initial value"/>
+    </label>
+    <button type="submit" onClick={()=> {setQuery(input), setInput("")}}>検索</button>
     <DisplayMountain/>
     <div className="rounded bg-sky-200">
       <button disabled = { page === 1} class= {`${page === 1 ? 'bg-blue-100' : 'bg-blue-600 text-white hover:bg-blue-400'} w-10 m-5`} onClick={handlePrev}>前</button>
@@ -150,6 +157,7 @@ function App() {
       <button disabled = { page === 1} class= {`${page === 1 ? 'bg-blue-100' : 'bg-blue-600 text-white hover:bg-blue-400'} w-10 m-5`} onClick={handlePrev}>前</button>
       <span>{page}</span>
       <button disabled = { mountains.length < limit } className={ `w-10 m-5 ${mountains.length < limit ? 'bg-blue-100' : 'bg-blue-600 text-white hover:bg-blue-400'}`} onClick={handleNext}>次</button>
+    </div>
     </div>
     </>
   )
