@@ -5,7 +5,7 @@
 また、今まで作成したアプリはHelokuでデプロイしていましたが、今回はVercelを利用してみました。<br>
 
 こちらでデプロイしています。<br>
-https://mountain-display-3tqrwrook-takei-daichis-projects.vercel.app/
+https://mountain-display-app.vercel.app/
 
 # 利用したAPI
 mountix API (1.1.0)　　https://mountix-docs.codemountains.org/#tag/mountains <br>
