@@ -10,6 +10,6 @@ mountix API (1.1.0)　　https://mountix-docs.codemountains.org/#tag/mountains <
 openAI API<br>
 Google map API<br>
 
-#言語
+# 言語
 JavaScript(react)<br>
 HTML & CSS(tailwindcss)
