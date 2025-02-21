@@ -86,6 +86,7 @@ function App() {
     setMountainState(0);
     setPage(1);
     setOnemountain([]);
+    setQuery("");
   }
 
 
@@ -95,7 +96,7 @@ function App() {
     }
     window.scrollTo(0, 0)
     return(
-      <div class="grid grid-cols-1 flex items-center justify-center bg-green-200 m-10">
+      <div class="grid grid-cols-1 flex items-center justify-center bg-green-200 m-5">
         <div class="rounded bg-white w-20 ml-3 my-2 hover:bg-black hover:text-white" onClick = {() => {setOnemountain([]), setText("");}}>閉じる</div>
         <div class="mt-5 text-2xl font-semibold">{onemountain.name}</div>
         <div>({onemountain.nameKana})</div>
@@ -126,18 +127,22 @@ function App() {
       <div class={`rounded w-20 m-1 ${mountainState === 2 ? "bg-green-700 text-white" : "bg-green-200 hover:bg-green-700"}`} onClick={setTwoNarrow}>二百名山</div>
       <div class="w-20 bg-stone-100 m-1 rounded hover:bg-black hover:text-white" onClick={resetNarrow}>リセット</div>
     </div>
-    <div class={`m-4 rounded w-20 w-20 bg-red-200`}>その他</div>
-    <label>
-      <input value={input} onChange={(e)=> setInput(e.target.value)} name="myInput" class="border-2 border-black-500 my-2" defaultValue="Some initial value"/>
-    </label>
-    <button type="submit" onClick={()=> {setQuery(input), setInput("")}}>検索</button>
+    <div class="flex justify-between">
+      <div class="m-3 flex">
+        <div class={`m-1 rounded w-20 w-20 bg-red-200`}>その他</div>
+      </div>
+      <div class="m-3">
+        <input value={input} onChange={(e)=> setInput(e.target.value)} name="myInput" class="m-1 rounded border-2 border-black-500" defaultValue="Some initial value"/>
+        <button type="submit" class="rounded hover:bg-black hover:text-white m-1" onClick={()=> {setQuery(input), setInput("")}}>検索</button>
+      </div>
+    </div>
     <DisplayMountain/>
     <div className="rounded bg-sky-200">
       <button disabled = { page === 1} class= {`${page === 1 ? 'bg-blue-100' : 'bg-blue-600 text-white hover:bg-blue-400'} w-10 m-5`} onClick={handlePrev}>前</button>
       <span>{page}</span>
       <button disabled = { mountains.length < limit } className={ `w-10 m-5 ${mountains.length < limit ? 'bg-blue-100' : 'bg-blue-600 text-white hover:bg-blue-400'}`} onClick={handleNext}>次</button>
     </div>
-    <div class="grid grid-cols-4 p-10">
+    <div class="grid grid-cols-4 p-1">
       {mountains.map((mountain)=> {
          {console.log(mountain.tags)}
         return (
