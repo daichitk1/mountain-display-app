@@ -6,6 +6,7 @@ import './App.css'
 import axios from 'axios';
 import GoogleMapAPI from './GoogleMapAPI';
 
+
 function App() {
   const [mountains, setMountains] = useState([]);
   const [page, setPage] = useState(1);
@@ -36,6 +37,28 @@ function App() {
     if (props.name===undefined){
       return null;
     }
+
+    const prompt = `
+    次の山に登ろうと考えています。おすすめを知りたいです。
+    山の詳細
+    山の名前: ${props.name}、
+    山のエリア: ${props.area}、
+    山の標高: ${props.elevation}、
+
+    出力形式は以下で合計300語以下でお願いします。
+    それぞれの行の間は改行文字(¥n)を付与してください。
+
+    1文での紹介文¥n
+    一つ目の魅力ポイント¥n
+    二つ目の魅力ポイント¥n
+    三つ目の魅力ポイント¥n
+    この山の難易度(かかる時間、登れる季節など)¥n
+    この山の注意点¥n
+    最後に締めの文¥n
+
+    事実ではないことをは話さないように最大限注意してください。また、山の情報は生死に関わる可能性があるので情報はより厳密にしてください。
+    `;
+
     const response = await axios.post(
       'https://api.openai.com/v1/chat/completions',{
           model: "gpt-4o",
@@ -43,7 +66,7 @@ function App() {
               { role: "system", content: "あなたは登山について詳しい専門家です" },
               {
                   role: "user",
-                  content: props.name +"について根拠が明確になっている情報のみ利用しておすすめを知りたいです。合計200文字以下で具体的な固有名素を踏まえ簡潔に教えて。山の詳細情報はこちらで(エリア"+ props.area+",標高"+props.elevation+")具体的な文が正しいかどうかの判断材料に利用してください。",
+                  content: prompt,
               },
           ],
       },{
@@ -107,7 +130,7 @@ function App() {
           {(text.length !== 0) &&
           text.split("¥n").map((line)=>{
             return (
-            <div class="w-100 mx-auto text-left">
+            <div class="w-100 mx-auto my-3 text-left">
               {line}
             </div>)
           })}
