@@ -47,7 +47,7 @@ function App() {
 
     出力形式は以下の要件を満たし300語程度で。
     行ごとに改行文字(¥n)をつけてください。
-    
+
     例:{
     1文での紹介文¥n
     一つ目の魅力ポイント¥n
@@ -158,7 +158,7 @@ function App() {
       </div>
       <div class="m-3">
         <input value={input} onChange={(e)=> setInput(e.target.value)} name="myInput" class="m-1 rounded border-2 border-black-500" defaultValue="Some initial value"/>
-        <button type="submit" class="rounded hover:bg-black hover:text-white m-1" onClick={()=> {setQuery(input), setInput("")}}>検索</button>
+        <button type="submit" class="rounded hover:bg-black hover:text-white m-1" onClick={()=> {setQuery(input), setInput(""), setOnemountain("")}}>検索</button>
       </div>
     </div>
     <DisplayMountain/>
