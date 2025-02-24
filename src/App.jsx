@@ -10,7 +10,7 @@ import GoogleMapAPI from './GoogleMapAPI';
 function App() {
   const [mountains, setMountains] = useState([]);
   const [page, setPage] = useState(1);
-  const [onemountain, setOnemountain] = useState([]);
+  const [mountainOne, setMountainOne] = useState([]);
   const [mountainState, setMountainState] = useState(0);
   const [text, setText] = useState("");
   const [input, setInput] = useState("");
@@ -20,20 +20,16 @@ function App() {
     fetchMountains(page);
   }, [page, mountainState, query])
   useEffect(()=>{
-    fetchAIdata(onemountain);
-  }, [onemountain])
+    fetchAIdata(mountainOne);
+  }, [mountainOne])
   const fetchMountains = async (page) => {
     const offset = (page - 1) * limit;
     const apiUrl= `https://mountix.codemountains.org/api/v1/mountains?limit=${limit}&offset=${offset}${mountainState === 0 ? "" : mountainState === 1 ? "&tag=1" : "&tag=2"}&name=${query}`;
     const result = await axios.get(apiUrl);
-    console.log(result.data.mountains);
     setMountains(result.data.mountains);
   }
 
   const fetchAIdata = async (props) =>{
-    console.log("にゃあーー");
-    console.log(props);
-    console.log("にゃあーー");
     if (props.name===undefined){
       return null;
     }
@@ -49,15 +45,13 @@ function App() {
     行ごとに改行文字(¥n)をつけてください。
 
     例:
-    
+
     1文での紹介文
     一つ目の魅力ポイント
     二つ目の魅力ポイント
     この山の難易度(かかる時間、登れる季節など)
     この山の注意点
     最後に締めの文
-    
-  
 
     事実ではないことをは話さないように最大限注意してください。また、山の情報は生死に関わる可能性があるので情報はより厳密にしてください。
     `;
@@ -66,7 +60,7 @@ function App() {
       'https://api.openai.com/v1/chat/completions',{
           model: "gpt-4o",
           messages: [
-              { role: "system", content: "あなたは登山について詳しい専門家です" },
+              { role: "system", content: "あなたは登山について詳しい専門家です。初めて山に登る人を想定して答えてください。" },
               {
                   role: "user",
                   content: prompt,
@@ -86,49 +80,49 @@ function App() {
     const nextPage = page + 1;
     await fetchMountains(nextPage);
     setPage(nextPage);
-    setOnemountain([]);
+    setMountainOne([]);
   }
 
   const handlePrev = async() =>{
     const prevPage = (page == 0 ? 0 : page - 1);
     await fetchMountains(prevPage);
     setPage(prevPage);
-    setOnemountain([]);
+    setMountainOne([]);
   }
 
   const setOneNarrow = async()=>{
     setMountainState(1);
     setPage(1);
-    setOnemountain([]);
+    setMountainOne([]);
   }
 
   const setTwoNarrow = async()=>{
     setMountainState(2);
     setPage(1);
-    setOnemountain([]);
+    setMountainOne([]);
   }
 
   const resetNarrow = async()=>{
     setMountainState(0);
     setPage(1);
-    setOnemountain([]);
+    setMountainOne([]);
     setQuery("");
   }
 
 
   function DisplayMountain(){
-    if (onemountain.length === 0){
+    if (mountainOne.length === 0){
       return null;
     }
     window.scrollTo(0, 0)
     return(
       <div class="grid grid-cols-1 flex items-center justify-center bg-green-200 m-5">
-        <div class="rounded bg-white w-20 ml-3 my-2 hover:bg-black hover:text-white" onClick = {() => {setOnemountain([]), setText("");}}>閉じる</div>
-        <div class="mt-5 text-2xl font-semibold">{onemountain.name}</div>
-        <div>({onemountain.nameKana})</div>
-        <div class="m-3 text-1xl">({onemountain.prefectures})</div>
-        <div class="m-1 text-1xl">地域: {onemountain.area}</div>
-        <div class="m-1 text-1xl">標高: {onemountain.elevation}m</div>
+        <div class="rounded bg-white w-20 ml-3 my-2 hover:bg-black hover:text-white" onClick = {() => {setMountainOne([]), setText("");}}>閉じる</div>
+        <div class="mt-5 text-2xl font-semibold">{mountainOne.name}</div>
+        <div>({mountainOne.nameKana})</div>
+        <div class="m-3 text-1xl">({mountainOne.prefectures})</div>
+        <div class="m-1 text-1xl">地域: {mountainOne.area}</div>
+        <div class="m-1 text-1xl">標高: {mountainOne.elevation}m</div>
         <div class="my-4">
           {(text.length !== 0) &&
           text.split("¥n").map((line)=>{
@@ -138,7 +132,7 @@ function App() {
             </div>)
           })}
         </div>
-        <GoogleMapAPI latitude={onemountain.location.latitude} longitude={onemountain.location.longitude} name={onemountain.name}/>
+        <GoogleMapAPI latitude={mountainOne.location.latitude} longitude={mountainOne.location.longitude} name={mountainOne.name}/>
       </div>
     );
   }
@@ -159,7 +153,7 @@ function App() {
       </div>
       <div class="m-3">
         <input value={input} onChange={(e)=> setInput(e.target.value)} name="myInput" class="m-1 rounded border-2 border-black-500" defaultValue="Some initial value"/>
-        <button type="submit" class="rounded hover:bg-black hover:text-white m-1" onClick={()=> {setQuery(input), setInput(""), setOnemountain("")}}>検索</button>
+        <button type="submit" class="rounded hover:bg-black hover:text-white m-1" onClick={()=> {setQuery(input), setInput(""), setMountainOne("")}}>検索</button>
       </div>
     </div>
     <DisplayMountain/>
@@ -173,7 +167,7 @@ function App() {
          {console.log(mountain.tags)}
         return (
         <div class={`w-70 h-70 m-1 hover:bg-sky-400 ${mountain.tags[0] === '百名山' ? 'bg-blue-200' : mountain.tags[0] === '二百名山' ? 'bg-green-200' : 'bg-red-200'}`}>
-          <div class="grid grid-cols-1 flex items-center justify-center" onClick = {() => {setText(""), setOnemountain(mountain)}}>
+          <div class="grid grid-cols-1 flex items-center justify-center" onClick = {() => {setText(""), setMountainOne(mountain)}}>
             <div class="mt-5 text-2xl font-semibold">{mountain.name}</div>
             <div>({mountain.nameKana})</div>
             <div class="m-3 text-1xl">({mountain.prefectures})</div>
