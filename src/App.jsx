@@ -115,7 +115,32 @@ function App() {
   }
 
 
-
+  const DisplayMountain = (props) => {
+    if (mountainOne.length === 0){
+      return null;
+    }
+    window.scrollTo(0, 0)
+    return(
+      <div class="grid grid-cols-1 flex items-center justify-center bg-green-200 m-5">
+        <div class="rounded bg-white w-20 ml-3 my-2 hover:bg-black hover:text-white" onClick = {() => {setMountainOne([]), setText("");}}>閉じる</div>
+        <div class="mt-5 text-2xl font-semibold">{props.name}</div>
+        <div>({props.nameKana})</div>
+        <div class="m-3 text-1xl">({props.prefectures})</div>
+        <div class="m-1 text-1xl">地域: {props.area}</div>
+        <div class="m-1 text-1xl">標高: {props.elevation}m</div>
+        <div class="my-4">
+          {(text.length !== 0) &&
+          text.split("¥n").map((line)=>{
+            return (
+            <div class="w-100 mx-auto my-3 text-left">
+              {line}
+            </div>)
+          })}
+        </div>
+        <GoogleMapAPI latitude={mountainOne.location.latitude} longitude={mountainOne.location.longitude} name={mountainOne.name}/>
+      </div>
+    );
+  }
 
 
   return (
