@@ -5,7 +5,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import axios from 'axios';
 import GoogleMapAPI from './GoogleMapAPI';
-
+import MountainCard from './MountainCard';
 
 function App() {
   const [mountains, setMountains] = useState([]);
@@ -169,16 +169,9 @@ function App() {
     </div>
     <div class="grid grid-cols-4 p-1">
       {mountains.map((mountain)=> {
-         {console.log(mountain.tags)}
-        return (
-        <div class={`w-70 h-70 m-1 hover:bg-sky-400 ${mountain.tags[0] === '百名山' ? 'bg-blue-200' : mountain.tags[0] === '二百名山' ? 'bg-green-200' : 'bg-red-200'}`}>
-          <div class="grid grid-cols-1 flex items-center justify-center" onClick = {() => {setText(""), setMountainOne(mountain)}}>
-            <div class="mt-5 text-2xl font-semibold">{mountain.name}</div>
-            <div>({mountain.nameKana})</div>
-            <div class="m-3 text-1xl">({mountain.prefectures})</div>
-            <div class="m-1 text-1xl">地域: {mountain.area}</div>
-            <div class="m-1 text-1xl">標高: {mountain.elevation}m</div>
-          </div>
+        return(
+        <div class={`w-70 h-70 m-1 hover:bg-sky-400 ${mountain.tags[0] === '百名山' ? 'bg-blue-200' : mountain.tags[0] === '二百名山' ? 'bg-green-200' : 'bg-red-200'}`} onClick = {() => {setText(""), setMountainOne(mountain)}}>
+            <MountainCard nameKana = {mountain.nameKana} prefectures = {mountain.prefectures} area = {mountain.area} name = {mountain.name} elevation = {mountain.elevation}/>
         </div>
         )
       })}
