@@ -128,7 +128,7 @@ function App() {
     }
     window.scrollTo(0, 0);
     return (
-      <div className="grid grid-cols-1 flex items-center justify-center bg-green-200 m-5">
+      <div className="w-full mx-auto grid grid-cols-1 flex items-center justify-center bg-green-200 m-5">
         <div
           className="rounded bg-white w-20 ml-3 my-2 hover:bg-black hover:text-white"
           onClick={() => {
@@ -145,14 +145,18 @@ function App() {
         <div className="my-4">
           {text.length !== 0 &&
             text.split("¥n").map((line) => {
-              return <div class="w-100 mx-auto my-3 text-left">{line}</div>;
+              return (
+                <div className="p-10 w-full mx-auto my-3 text-left">{line}</div>
+              );
             })}
         </div>
-        <GoogleMapAPI
-          latitude={mountainOne.location.latitude}
-          longitude={mountainOne.location.longitude}
-          name={mountainOne.name}
-        />
+        <div className="my-4 w-4/5 mx-auto">
+          <GoogleMapAPI
+            latitude={mountainOne.location.latitude}
+            longitude={mountainOne.location.longitude}
+            name={mountainOne.name}
+          />
+        </div>
       </div>
     );
   };
@@ -198,7 +202,7 @@ function App() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               name="myInput"
-              className="m-1 rounded border-2 border-black-500"
+              className="w-27 m-1 rounded border-2 border-black-500"
               defaultValue="Some initial value"
             />
             <button
@@ -244,11 +248,11 @@ function App() {
             次
           </button>
         </div>
-        <div class="grid grid-cols-4 p-1">
+        <div class="mx-auto grid grid-cols-1 md:grid-cols-4 p-1">
           {mountains.map((mountain) => {
             return (
               <div
-                className={`w-70 h-70 m-1 hover:bg-sky-400 ${
+                className={`mx-auto w-full h-70 m-1 hover:bg-sky-400 ${
                   mountain.tags[0] === "百名山"
                     ? "bg-blue-200"
                     : mountain.tags[0] === "二百名山"

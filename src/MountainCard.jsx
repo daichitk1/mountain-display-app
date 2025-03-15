@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const MountainCard = (props) => (
   <div class="grid grid-cols-1 flex items-center justify-center">
