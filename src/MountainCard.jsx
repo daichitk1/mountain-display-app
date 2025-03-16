@@ -1,7 +1,7 @@
 import React from "react";
 
 const MountainCard = (props) => (
-  <div class="grid grid-cols-1 flex items-center justify-center">
+  <div class="m-3 grid grid-cols-1 flex items-center justify-center">
     <div class="mt-5 text-2xl font-semibold">{props.name}</div>
     <div>({props.nameKana})</div>
     <div class="m-3 text-1xl">({props.prefectures})</div>
