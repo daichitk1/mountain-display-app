@@ -252,7 +252,7 @@ function App() {
           {mountains.map((mountain) => {
             return (
               <div
-                className={`mx-auto w-full h-70 m-1 hover:bg-sky-400 ${
+                className={`mx-auto w-full md:w-70 h-70 m-1 hover:bg-sky-400 ${
                   mountain.tags[0] === "百名山"
                     ? "bg-blue-200"
                     : mountain.tags[0] === "二百名山"
